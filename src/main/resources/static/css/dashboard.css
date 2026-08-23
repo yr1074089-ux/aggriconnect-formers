@@ -1,0 +1,125 @@
+/* ---------- Auth pages ---------- */
+.auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  background: var(--husk);
+}
+.auth-side {
+  flex: 1;
+  background: linear-gradient(160deg, var(--canopy-dark), var(--canopy));
+  color: var(--husk);
+  padding: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.auth-side-quote { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.35; max-width: 30ch; }
+.auth-side-quote span { display: block; margin-top: 16px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--sundried); text-transform: uppercase; letter-spacing: 0.08em; }
+.auth-form-col { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
+.auth-box { width: 100%; max-width: 420px; }
+.auth-box .brand { margin-bottom: 32px; font-size: 1.3rem; }
+.auth-box h1 { font-size: 1.7rem; margin-bottom: 6px; }
+.auth-box .lead { margin-bottom: 28px; font-size: 0.92rem; }
+.auth-switch { text-align: center; margin-top: 22px; font-size: 0.88rem; color: var(--ink-soft); }
+.auth-switch a { color: var(--canopy); font-weight: 600; }
+.role-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.role-pick {
+  border: 1.5px solid var(--line); border-radius: var(--radius-md); padding: 14px 8px; text-align: center;
+  cursor: pointer; font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); background: var(--white);
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.role-pick svg { width: 20px; height: 20px; margin: 0 auto 8px; display: block; stroke: var(--ink-soft); }
+.role-pick.active { border-color: var(--canopy); color: var(--canopy); background: #F0F4EF; }
+.role-pick.active svg { stroke: var(--canopy); }
+.form-error { background: var(--clay-light); color: var(--clay); font-size: 0.85rem; padding: 11px 14px; border-radius: var(--radius-sm); margin-bottom: 18px; display: none; }
+.form-error.show { display: block; }
+.demo-note { margin-top: 26px; font-size: 0.78rem; color: var(--ink-soft); background: var(--white); border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 12px 14px; }
+.demo-note .mono { color: var(--canopy); }
+
+@media (max-width: 860px) {
+  .auth-side { display: none; }
+}
+
+/* ---------- Dashboard shell ---------- */
+.dash-body { background: var(--husk); min-height: 100vh; }
+.dash-layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 63px); }
+.dash-sidebar { background: var(--white); border-right: 1px solid var(--line); padding: 24px 14px; }
+.dash-nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-weight: 500; color: var(--ink-soft); cursor: pointer; margin-bottom: 4px;
+  border: none; background: none; width: 100%; text-align: left; font-family: var(--font-body);
+}
+.dash-nav-item svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
+.dash-nav-item:hover { background: var(--husk); color: var(--ink); }
+.dash-nav-item.active { background: #E9F1E0; color: var(--sprout-dark); font-weight: 600; }
+.dash-main { padding: 36px 40px; max-width: 1080px; }
+.dash-view { display: none; }
+.dash-view.active { display: block; }
+.dash-header { margin-bottom: 28px; }
+.dash-header h1 { font-size: 1.55rem; margin-bottom: 4px; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.stat-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 18px 20px; }
+.stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); font-weight: 600; margin-bottom: 8px; }
+.stat-value { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--canopy-dark); }
+
+.panel { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px; margin-bottom: 24px; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.panel-header h3 { font-size: 1.1rem; margin: 0; }
+
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.product-card { border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px; background: var(--white); display: flex; flex-direction: column; }
+.product-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
+.product-card h4 { font-size: 1rem; margin: 0; }
+.product-card .price { font-family: var(--font-mono); font-weight: 600; color: var(--canopy); white-space: nowrap; }
+.product-card .desc { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 12px; flex-grow: 1; }
+.product-card .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 12px; }
+.product-card .actions { display: flex; gap: 8px; }
+.product-card .actions .btn { flex: 1; }
+
+.ai-inline-btn {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--sundried-dark);
+  background: none; border: none; cursor: pointer; padding: 0; margin-top: 6px;
+}
+.ai-inline-btn svg { width: 14px; height: 14px; stroke: var(--sundried-dark); }
+.ai-inline-btn[disabled] { opacity: 0.5; cursor: wait; }
+
+.cart-fab {
+  position: fixed; bottom: 26px; right: 26px; z-index: 30;
+  background: var(--canopy-dark); color: var(--husk); border-radius: 999px; padding: 14px 22px;
+  display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-lg); cursor: pointer; border: none;
+  font-family: var(--font-body); font-weight: 600; font-size: 0.9rem;
+}
+.cart-count { background: var(--sundried); color: var(--canopy-dark); border-radius: 999px; font-family: var(--font-mono); font-size: 0.75rem; padding: 2px 8px; }
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(27,42,31,0.45); z-index: 60;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-backdrop.show { display: flex; }
+.modal { background: var(--white); border-radius: var(--radius-lg); padding: 28px; width: 100%; max-width: 460px; max-height: 86vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.modal-close { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: var(--ink-soft); line-height: 1; }
+.cart-line { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.88rem; }
+.cart-line:last-child { border-bottom: none; }
+.cart-line .qty-controls { display: flex; align-items: center; gap: 8px; }
+.qty-btn { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); background: var(--white); cursor: pointer; font-weight: 700; line-height: 1; }
+.cart-total-row { display: flex; justify-content: space-between; font-weight: 600; padding-top: 14px; margin-top: 6px; border-top: 1.5px solid var(--ink); }
+
+.timeline { display: flex; gap: 0; margin: 4px 0 8px; }
+.timeline-step { flex: 1; text-align: center; position: relative; }
+.timeline-step .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); margin: 0 auto 6px; }
+.timeline-step.done .dot { background: var(--sprout); }
+.timeline-step.current .dot { background: var(--sundried); }
+.timeline-step::after { content: ""; position: absolute; top: 5px; left: 50%; width: 100%; height: 2px; background: var(--line); z-index: -1; }
+.timeline-step:last-child::after { display: none; }
+.timeline-step.done::after { background: var(--sprout); }
+.timeline-step .tl-label { font-size: 0.68rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.03em; }
+
+@media (max-width: 900px) {
+  .dash-layout { grid-template-columns: 1fr; }
+  .dash-sidebar { display: flex; overflow-x: auto; padding: 12px; gap: 6px; }
+  .dash-nav-item { white-space: nowrap; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .dash-main { padding: 24px 18px; }
+}

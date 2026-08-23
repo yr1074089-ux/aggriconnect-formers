@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriConnect — Farm to doorstep, direct</title>
+<meta name="description" content="AgriConnect connects farmers directly with customers through AI-assisted listings, transparent pricing, and real-time delivery tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 4C10 8 8 14 8 19a8 8 0 0 0 16 0c0-5-2-11-8-15Z" stroke="#24402F" stroke-width="1.6"/><path d="M16 30V16" stroke="#24402F" stroke-width="1.6"/></svg>
+      AgriConnect
+    </a>
+    <div class="nav-links">
+      <a href="#roles">For you</a>
+      <a href="#ai-tools">AI tools</a>
+      <a href="#flow">How it works</a>
+    </div>
+    <div class="nav-actions" id="navActions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Create account</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-eyebrow">Farmer · Customer · Delivery, one platform</span>
+        <h1>From the field to your doorstep, <em>tracked the whole way</em>.</h1>
+        <p class="hero-sub">AgriConnect lets farmers list produce in minutes with AI-assisted descriptions and pricing, gives customers a direct line to the source, and keeps every delivery visible in real time — for everyone involved.</p>
+        <div class="hero-ctas">
+          <a href="register.html?role=CUSTOMER" class="btn btn-accent">Browse the marketplace</a>
+          <a href="register.html?role=FARMER" class="btn btn-outline-light">Sell your harvest</a>
+        </div>
+        <div class="hero-proof">
+          <div class="hero-proof-item"><strong>Direct from farm</strong>No middlemen markup</div>
+          <div class="hero-proof-item"><strong>AI-assisted listings</strong>Descriptions &amp; pricing</div>
+          <div class="hero-proof-item"><strong>Live tracking</strong>Every delivery, every step</div>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="hero-panel-header">
+          <span class="hero-panel-title">Listing preview</span>
+          <span class="badge badge-sundried">● Live</span>
+        </div>
+        <div class="hero-listing">
+          <span class="hero-ai-tag">✦ AI-generated description</span>
+          <div class="hero-listing-top">
+            <span class="hero-listing-name">Alphonso Mangoes</span>
+            <span class="hero-listing-price mono">₹75.00 / kg</span>
+          </div>
+          <p class="hero-listing-desc">Farm-fresh, naturally grown Alphonso mangoes, sourced directly from local orchards and picked at peak ripeness for maximum taste and nutrition.</p>
+        </div>
+        <div class="hero-panel-footer">
+          <span>Listed by Ramesh Kumar, Rampur</span>
+          <span class="mono">120 kg available</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="route">
+      <div class="route-track">
+        <div class="route-stop is-active">
+          <div class="route-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c-4.5 3-6 7-6 10.5a6 6 0 0 0 12 0C18 10 16.5 6 12 3Z" stroke-width="1.6"/></svg></div>
+          <span class="route-label">Farm</span>
+          <span class="route-desc">Harvested &amp; listed</span>
+        </div>
+        <div class="route-stop">
+          <div class="route-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9h16l-1.5 10.5a1 1 0 0 1-1 .9H6.5a1 1 0 0 1-1-.9L4 9Z" stroke-width="1.6"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke-width="1.6"/></svg></div>
+          <span class="route-label">Market</span>
+          <span class="route-desc">Order placed</span>
+        </div>
+        <div class="route-stop">
+          <div class="route-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v8H3z" stroke-width="1.6"/><path d="M14 10h4l3 3v2h-7v-5Z" stroke-width="1.6"/><circle cx="7" cy="18" r="1.6" stroke-width="1.6"/><circle cx="17" cy="18" r="1.6" stroke-width="1.6"/></svg></div>
+          <span class="route-label">Delivery</span>
+          <span class="route-desc">Picked up, in transit</span>
+        </div>
+        <div class="route-stop">
+          <div class="route-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11 12 4l8 7" stroke-width="1.6"/><path d="M6 10v9h12v-9" stroke-width="1.6"/></svg></div>
+          <span class="route-label">Doorstep</span>
+          <span class="route-desc">Delivered &amp; paid</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="strip">
+  <div class="container strip-grid">
+    <div class="strip-item">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke-width="1.6"/></svg>
+      <div><div class="strip-item-title">AI-assisted listings</div><div class="strip-item-desc">Auto-generated descriptions, fair pricing, and category detection.</div></div>
+    </div>
+    <div class="strip-item">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v8H3z" stroke-width="1.6"/><path d="M14 10h4l3 3v2h-7v-5Z" stroke-width="1.6"/></svg>
+      <div><div class="strip-item-title">Real-time tracking</div><div class="strip-item-desc">Delivery status and location updates at every stage.</div></div>
+    </div>
+    <div class="strip-item">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 3 7v6c0 5 4 8.5 9 9 5-.5 9-4 9-9V7l-9-5Z" stroke-width="1.6"/></svg>
+      <div><div class="strip-item-title">Secure by design</div><div class="strip-item-desc">JWT-based auth with role-scoped access for every account.</div></div>
+    </div>
+    <div class="strip-item">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="1.6"/><path d="M3 10h18" stroke-width="1.6"/></svg>
+      <div><div class="strip-item-title">Transparent earnings</div><div class="strip-item-desc">Every farmer transaction logged and easy to reconcile.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="container">
+    <div class="text-center" style="max-width:640px;margin:0 auto 56px;">
+      <span class="eyebrow">Three roles, one supply chain</span>
+      <h2 style="font-size:2.1rem;">Built around how the harvest actually moves</h2>
+      <p>Each account type gets a workspace suited to what they actually need to do — not a one-size-fits-all dashboard.</p>
+    </div>
+    <div class="grid-3">
+      <div class="role-card">
+        <div class="role-icon farmer"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c-4.5 3-6 7-6 10.5a6 6 0 0 0 12 0C18 10 16.5 6 12 3Z" stroke-width="1.6"/></svg></div>
+        <h3>Farmers</h3>
+        <p>List and manage produce, let AI handle the copywriting and pricing research, and track every rupee earned.</p>
+        <ul class="role-list">
+          <li>Add, edit &amp; retire product listings</li>
+          <li>AI-generated descriptions &amp; price suggestions</li>
+          <li>See orders as they come in</li>
+          <li>Full transaction &amp; earnings history</li>
+        </ul>
+        <a href="register.html?role=FARMER" class="btn btn-ghost btn-block">Register as a farmer</a>
+      </div>
+      <div class="role-card">
+        <div class="role-icon customer"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9h16l-1.5 10.5a1 1 0 0 1-1 .9H6.5a1 1 0 0 1-1-.9L4 9Z" stroke-width="1.6"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke-width="1.6"/></svg></div>
+        <h3>Customers</h3>
+        <p>Browse produce straight from the source, order in a few clicks, and follow your delivery until it's at your door.</p>
+        <ul class="role-list">
+          <li>Search &amp; filter fresh produce by category</li>
+          <li>Simple cart &amp; checkout</li>
+          <li>Order history in one place</li>
+          <li>Live delivery status tracking</li>
+        </ul>
+        <a href="register.html?role=CUSTOMER" class="btn btn-ghost btn-block">Register as a customer</a>
+      </div>
+      <div class="role-card">
+        <div class="role-icon delivery"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v8H3z" stroke-width="1.6"/><path d="M14 10h4l3 3v2h-7v-5Z" stroke-width="1.6"/><circle cx="7" cy="18" r="1.6" stroke-width="1.6"/><circle cx="17" cy="18" r="1.6" stroke-width="1.6"/></svg></div>
+        <h3>Delivery partners</h3>
+        <p>Pick up open delivery tasks, update status as you go, and keep both the farmer and customer in the loop.</p>
+        <ul class="role-list">
+          <li>Browse &amp; accept unassigned tasks</li>
+          <li>Update pickup, transit &amp; delivery status</li>
+          <li>Log current location per stop</li>
+          <li>Clear task history</li>
+        </ul>
+        <a href="register.html?role=DELIVERY_PARTNER" class="btn btn-ghost btn-block">Register as a delivery partner</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight" id="ai-tools">
+  <div class="container">
+    <div class="ai-section">
+      <div class="ai-grid">
+        <div class="ai-copy">
+          <span class="eyebrow">AI-powered tools</span>
+          <h2>Listing a product shouldn't feel like a second job</h2>
+          <p style="color:rgba(243,241,231,0.75);">Farmers type the basics — AgriConnect fills the gaps, so every listing looks professional from the first upload.</p>
+          <ul class="ai-tools-list">
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke-width="1.6"/></svg><span><strong>Description generator</strong> — turns a product name and a few highlights into a polished, market-ready description.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M8 7h6.5a2.5 2.5 0 0 1 0 5H8m0 0h7.5a2.5 2.5 0 0 1 0 5H8" stroke-width="1.6"/></svg><span><strong>Price suggestions</strong> — recommends a fair price from category, quality grade, and quantity.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke-width="1.6"/><rect x="14" y="3" width="7" height="7" stroke-width="1.6"/><rect x="3" y="14" width="7" height="7" stroke-width="1.6"/><rect x="14" y="14" width="7" height="7" stroke-width="1.6"/></svg><span><strong>Auto-categorization</strong> — detects the right category automatically from the product name.</span></li>
+          </ul>
+        </div>
+        <div class="ai-demo">
+          <div class="ai-demo-line"><span class="prompt">&gt;</span> generate-description --product "Fresh Tomatoes" --features "organic, pesticide-free"</div>
+          <div class="ai-demo-output">"Farm-fresh, naturally grown tomatoes, sourced directly from local farms. Picked at peak ripeness for maximum freshness, taste and nutrition. Highlights: organic, pesticide-free."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="flow">
+  <div class="container">
+    <div class="text-center" style="max-width:640px;margin:0 auto 56px;">
+      <span class="eyebrow">Order lifecycle</span>
+      <h2 style="font-size:2.1rem;">Six steps, visible to everyone involved</h2>
+      <p>Placing an order kicks off a tracked sequence — the customer, the farmer, and the delivery partner all see the same status.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card card-flat"><span class="badge badge-canopy" style="margin-bottom:12px;">01</span><h4 style="font-size:1.05rem;">Order placed</h4><p style="font-size:0.88rem;">Customer checks out; stock is reserved instantly.</p></div>
+      <div class="card card-flat"><span class="badge badge-canopy" style="margin-bottom:12px;">02</span><h4 style="font-size:1.05rem;">Farmer confirmed</h4><p style="font-size:0.88rem;">The order enters the delivery queue.</p></div>
+      <div class="card card-flat"><span class="badge badge-canopy" style="margin-bottom:12px;">03</span><h4 style="font-size:1.05rem;">Partner assigned</h4><p style="font-size:0.88rem;">A delivery partner accepts the task.</p></div>
+      <div class="card card-flat"><span class="badge badge-canopy" style="margin-bottom:12px;">04</span><h4 style="font-size:1.05rem;">Picked up &amp; in transit</h4><p style="font-size:0.88rem;">Live status and location updates as it moves.</p></div>
+      <div class="card card-flat"><span class="badge badge-canopy" style="margin-bottom:12px;">05</span><h4 style="font-size:1.05rem;">Delivered</h4><p style="font-size:0.88rem;">Customer receives the order; status closes out.</p></div>
+      <div class="card card-flat"><span class="badge badge-canopy" style="margin-bottom:12px;">06</span><h4 style="font-size:1.05rem;">Earnings released</h4><p style="font-size:0.88rem;">The farmer's transaction history updates automatically.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="color:var(--husk);margin-bottom:12px;">
+          <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 4C10 8 8 14 8 19a8 8 0 0 0 16 0c0-5-2-11-8-15Z" stroke="#F3F1E7" stroke-width="1.6"/><path d="M16 30V16" stroke="#F3F1E7" stroke-width="1.6"/></svg>
+          AgriConnect
+        </div>
+        <p style="color:rgba(243,241,231,0.6);max-width:32ch;font-size:0.88rem;">A direct line between the people who grow food and the people who eat it.</p>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:14px;font-size:0.85rem;">Platform</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.85rem;">
+          <a href="#roles">For you</a><a href="#ai-tools">AI tools</a><a href="#flow">How it works</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:14px;font-size:0.85rem;">Account</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.85rem;">
+          <a href="login.html">Log in</a><a href="register.html">Create account</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;margin-bottom:14px;font-size:0.85rem;">Project</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.85rem;">
+          <span style="color:rgba(243,241,231,0.6);">Spring Boot · REST API</span>
+          <span style="color:rgba(243,241,231,0.6);">JWT-secured, role-based</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AgriConnect. Built as a major project.</span>
+      <span>Farmer · Customer · Delivery Partner · Admin</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/common.js"></script>
+<script>
+  if (Session.isLoggedIn()) {
+    document.getElementById('navActions').innerHTML =
+      '<a href="' + Session.dashboardFor(Session.role()) + '" class="btn btn-primary btn-sm">Go to dashboard</a>';
+  }
+</script>
+</body>
+</html>

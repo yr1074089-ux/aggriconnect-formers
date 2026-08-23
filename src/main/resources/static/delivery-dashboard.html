@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery dashboard — AgriConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dash-body">
+
+<nav class="nav nav-dash" id="dashNav"></nav>
+
+<div class="dash-layout">
+  <aside class="dash-sidebar">
+    <button class="dash-nav-item active" data-view="available">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke-width="1.6"/><path d="m20 20-3.5-3.5" stroke-width="1.6"/></svg>
+      Available tasks
+    </button>
+    <button class="dash-nav-item" data-view="mine">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v8H3z" stroke-width="1.6"/><path d="M14 10h4l3 3v2h-7v-5Z" stroke-width="1.6"/></svg>
+      My deliveries
+    </button>
+  </aside>
+
+  <main class="dash-main">
+
+    <!-- AVAILABLE TASKS -->
+    <section class="dash-view active" id="view-available">
+      <div class="dash-header"><h1>Available tasks</h1><p class="muted">Unassigned deliveries you can pick up.</p></div>
+      <div id="availableList"></div>
+      <div id="availableEmpty" class="empty-state" style="display:none;"><p>No unassigned tasks right now — check back soon.</p></div>
+    </section>
+
+    <!-- MY TASKS -->
+    <section class="dash-view" id="view-mine">
+      <div class="dash-header"><h1>My deliveries</h1><p class="muted">Update status as each delivery moves.</p></div>
+      <div id="myList"></div>
+      <div id="myEmpty" class="empty-state" style="display:none;"><p>You haven't accepted any deliveries yet.</p></div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+  if (!requireRole('DELIVERY_PARTNER')) { /* redirected */ }
+  renderDashNav('Delivery partner');
+
+  const navItems = document.querySelectorAll('.dash-nav-item');
+  navItems.forEach(item => item.addEventListener('click', () => switchView(item.dataset.view)));
+
+  function switchView(view) {
+    document.querySelectorAll('.dash-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.view === view));
+    if (view === 'available') loadAvailable();
+    if (view === 'mine') loadMine();
+  }
+
+  const NEXT_STATUS = { ASSIGNED: 'PICKED_UP', PICKED_UP: 'IN_TRANSIT', IN_TRANSIT: 'DELIVERED' };
+  const NEXT_LABEL = { ASSIGNED: 'Mark picked up', PICKED_UP: 'Mark in transit', IN_TRANSIT: 'Mark delivered' };
+
+  async function loadAvailable() {
+    try {
+      const tasks = await authFetch('/api/delivery/tasks/available');
+      const wrap = document.getElementById('availableList');
+      const empty = document.getElementById('availableEmpty');
+      wrap.innerHTML = '';
+      if (!tasks.length) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      tasks.forEach(t => wrap.appendChild(availableCard(t)));
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  function availableCard(t) {
+    const o = t.order || {};
+    const el = document.createElement('div');
+    el.className = 'panel';
+    el.innerHTML = `
+      <div class="panel-header">
+        <div>
+          <h3>Order #${o.id}</h3>
+          <div class="muted" style="font-size:0.82rem;">Deliver to: ${escapeHtml(o.deliveryAddress || '—')}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mono" style="font-weight:600;">${money(o.totalAmount)}</div>
+          <span class="badge badge-muted">Unassigned</span>
+        </div>
+      </div>
+      <button class="btn btn-accent btn-sm" onclick="acceptTask(${t.id})">Accept this delivery</button>
+    `;
+    return el;
+  }
+
+  async function acceptTask(deliveryId) {
+    try {
+      await authFetch(`/api/delivery/tasks/${deliveryId}/accept`, { method: 'POST' });
+      toast('Task accepted', 'success');
+      loadAvailable();
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  async function loadMine() {
+    try {
+      const tasks = await authFetch('/api/delivery/tasks/mine');
+      const wrap = document.getElementById('myList');
+      const empty = document.getElementById('myEmpty');
+      wrap.innerHTML = '';
+      if (!tasks.length) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      tasks.sort((a,b) => b.id - a.id).forEach(t => wrap.appendChild(myCard(t)));
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  function myCard(t) {
+    const o = t.order || {};
+    const el = document.createElement('div');
+    el.className = 'panel';
+    const isFinal = t.status === 'DELIVERED' || t.status === 'CANCELLED';
+    const nextStatus = NEXT_STATUS[t.status];
+    el.innerHTML = `
+      <div class="panel-header">
+        <div>
+          <h3>Order #${o.id}</h3>
+          <div class="muted" style="font-size:0.82rem;">Deliver to: ${escapeHtml(o.deliveryAddress || '—')}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mono" style="font-weight:600;">${money(o.totalAmount)}</div>
+          <span class="badge ${statusBadgeClass(t.status)}">${t.status.replace(/_/g,' ')}</span>
+        </div>
+      </div>
+      ${t.currentLocation ? `<div class="muted" style="font-size:0.82rem;margin-bottom:12px;">📍 Last update: ${escapeHtml(t.currentLocation)}</div>` : ''}
+      ${!isFinal ? `
+        <div class="input-row" style="margin-bottom:12px;">
+          <input type="text" id="loc-${t.id}" placeholder="Current location (optional)">
+        </div>
+        <div class="flex-gap">
+          <button class="btn btn-primary btn-sm" onclick="advanceStatus(${t.id}, '${nextStatus}')">${NEXT_LABEL[t.status] || 'Update status'}</button>
+          <button class="btn btn-danger btn-sm" onclick="advanceStatus(${t.id}, 'CANCELLED')">Cancel</button>
+        </div>
+      ` : `<p class="muted" style="margin:0;font-size:0.85rem;">This delivery is closed.</p>`}
+    `;
+    return el;
+  }
+
+  async function advanceStatus(deliveryId, status) {
+    if (status === 'CANCELLED' && !confirm('Cancel this delivery?')) return;
+    const locInput = document.getElementById('loc-' + deliveryId);
+    const currentLocation = locInput ? locInput.value.trim() : '';
+    try {
+      await authFetch(`/api/delivery/tasks/${deliveryId}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status, currentLocation })
+      });
+      toast('Status updated', 'success');
+      loadMine();
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  loadAvailable();
+</script>
+</body>
+</html>

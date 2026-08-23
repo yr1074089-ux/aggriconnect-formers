@@ -1,0 +1,13 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Maven
+target/
+
+# Secrets
+src/main/resources/application.properties
+
+# Environment
+.env
+git

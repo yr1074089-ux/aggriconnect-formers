@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmer dashboard — AgriConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dash-body">
+
+<nav class="nav nav-dash" id="dashNav"></nav>
+
+<div class="dash-layout">
+  <aside class="dash-sidebar">
+    <button class="dash-nav-item active" data-view="products">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke-width="1.6"/><rect x="14" y="3" width="7" height="7" stroke-width="1.6"/><rect x="3" y="14" width="7" height="7" stroke-width="1.6"/><rect x="14" y="14" width="7" height="7" stroke-width="1.6"/></svg>
+      My products
+    </button>
+    <button class="dash-nav-item" data-view="add">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke-width="1.6"/></svg>
+      Add product
+    </button>
+    <button class="dash-nav-item" data-view="orders">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 9h16l-1.5 10.5a1 1 0 0 1-1 .9H6.5a1 1 0 0 1-1-.9L4 9Z" stroke-width="1.6"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke-width="1.6"/></svg>
+      Orders
+    </button>
+    <button class="dash-nav-item" data-view="earnings">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M8 7h6.5a2.5 2.5 0 0 1 0 5H8m0 0h7.5a2.5 2.5 0 0 1 0 5H8" stroke-width="1.6"/></svg>
+      Earnings
+    </button>
+  </aside>
+
+  <main class="dash-main">
+
+    <!-- PRODUCTS -->
+    <section class="dash-view active" id="view-products">
+      <div class="dash-header flex-between">
+        <div>
+          <h1>My products</h1>
+          <p class="muted">Manage your listings and availability.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="switchView('add')">+ Add product</button>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+      <div id="productEmpty" class="empty-state" style="display:none;">
+        <p>You haven't listed anything yet.</p>
+        <button class="btn btn-accent btn-sm" onclick="switchView('add')">Add your first product</button>
+      </div>
+    </section>
+
+    <!-- ADD / EDIT PRODUCT -->
+    <section class="dash-view" id="view-add">
+      <div class="dash-header">
+        <h1 id="formTitle">Add a product</h1>
+        <p class="muted">Fill in the basics — AI can handle the description and pricing.</p>
+      </div>
+      <div class="panel" style="max-width:640px;">
+        <form id="productForm">
+          <input type="hidden" id="editId">
+          <div class="field">
+            <label for="pName">Product name</label>
+            <input type="text" id="pName" required placeholder="e.g. Fresh Tomatoes">
+          </div>
+          <div class="input-row">
+            <div class="field">
+              <label for="pCategory">Category</label>
+              <input type="text" id="pCategory" placeholder="Auto-detected if left blank">
+            </div>
+            <div class="field">
+              <label for="pUnit">Unit</label>
+              <input type="text" id="pUnit" placeholder="kg, dozen, litre…" value="kg">
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="field">
+              <label for="pPrice">Price (₹ per unit)</label>
+              <input type="number" id="pPrice" min="0" step="0.01" required placeholder="0.00">
+              <button type="button" class="ai-inline-btn" id="btnAiPrice">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke-width="1.6"/></svg>
+                Suggest price with AI
+              </button>
+            </div>
+            <div class="field">
+              <label for="pQuantity">Quantity available</label>
+              <input type="number" id="pQuantity" min="0" required placeholder="0">
+            </div>
+          </div>
+          <div class="field">
+            <label for="pDescription">Description</label>
+            <textarea id="pDescription" placeholder="Describe your product, or generate one with AI"></textarea>
+            <button type="button" class="ai-inline-btn" id="btnAiDesc">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke-width="1.6"/></svg>
+              Generate description with AI
+            </button>
+          </div>
+          <div class="field">
+            <label for="pImage">Image URL <span class="muted" style="font-weight:400;">(optional)</span></label>
+            <input type="url" id="pImage" placeholder="https://…">
+          </div>
+          <div class="flex-gap">
+            <button type="submit" class="btn btn-primary" id="saveProductBtn">Save product</button>
+            <button type="button" class="btn btn-ghost" onclick="resetForm(); switchView('products');">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section class="dash-view" id="view-orders">
+      <div class="dash-header">
+        <h1>Orders</h1>
+        <p class="muted">Orders that include one or more of your products.</p>
+      </div>
+      <div class="panel">
+        <table id="ordersTable">
+          <thead><tr><th>Order</th><th>Customer</th><th>Placed</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div id="ordersEmpty" class="empty-state" style="display:none;"><p>No orders yet.</p></div>
+      </div>
+    </section>
+
+    <!-- EARNINGS -->
+    <section class="dash-view" id="view-earnings">
+      <div class="dash-header"><h1>Earnings</h1><p class="muted">Your transaction history, updated automatically on delivery.</p></div>
+      <div class="stat-grid" style="grid-template-columns:1fr 1fr;max-width:520px;">
+        <div class="stat-card"><div class="stat-label">Total earnings</div><div class="stat-value" id="totalEarnings">₹0.00</div></div>
+        <div class="stat-card"><div class="stat-label">Completed transactions</div><div class="stat-value" id="txnCount">0</div></div>
+      </div>
+      <div class="panel">
+        <table id="txnTable">
+          <thead><tr><th>Transaction</th><th>Order</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div id="txnEmpty" class="empty-state" style="display:none;"><p>No transactions yet — earnings appear here once an order is delivered.</p></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+  if (!requireRole('FARMER')) { /* redirected */ }
+  renderDashNav('Farmer');
+
+  const navItems = document.querySelectorAll('.dash-nav-item');
+  navItems.forEach(item => item.addEventListener('click', () => switchView(item.dataset.view)));
+
+  function switchView(view) {
+    document.querySelectorAll('.dash-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.view === view));
+    if (view === 'products') loadProducts();
+    if (view === 'orders') loadOrders();
+    if (view === 'earnings') loadEarnings();
+  }
+
+  // ---------- Products ----------
+  async function loadProducts() {
+    try {
+      const products = await authFetch('/api/farmer/products');
+      const grid = document.getElementById('productGrid');
+      const empty = document.getElementById('productEmpty');
+      grid.innerHTML = '';
+      if (!products.length) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      products.forEach(p => grid.appendChild(productCard(p)));
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  function productCard(p) {
+    const el = document.createElement('div');
+    el.className = 'product-card';
+    el.innerHTML = `
+      <div class="product-card-top">
+        <h4>${escapeHtml(p.name)}</h4>
+        <span class="price">₹${Number(p.price).toFixed(2)}</span>
+      </div>
+      <div class="meta-row">
+        <span class="badge badge-canopy">${escapeHtml(p.category || 'other')}</span>
+        <span>${p.quantity} ${escapeHtml(p.unit || '')}</span>
+      </div>
+      <p class="desc">${escapeHtml((p.description || '').slice(0, 110))}${(p.description||'').length > 110 ? '…' : ''}</p>
+      <div class="meta-row">
+        <span class="badge ${p.available ? 'badge-sprout' : 'badge-muted'}">${p.available ? 'Available' : 'Hidden'}</span>
+        ${p.aiGenerated ? '<span class="badge badge-sundried">✦ AI</span>' : ''}
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost btn-sm" onclick="editProduct(${p.id})">Edit</button>
+        <button class="btn btn-sm ${p.available ? 'btn-danger' : 'btn-accent'}" onclick="toggleAvailability(${p.id}, ${!p.available})">${p.available ? 'Hide' : 'Show'}</button>
+      </div>
+      <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;color:var(--clay);" onclick="deleteProduct(${p.id})">Delete</button>
+    `;
+    return el;
+  }
+
+  let allProductsCache = [];
+  async function editProduct(id) {
+    try {
+      allProductsCache = allProductsCache.length ? allProductsCache : await authFetch('/api/farmer/products');
+      const p = allProductsCache.find(x => x.id === id) || (await authFetch('/api/farmer/products')).find(x => x.id === id);
+      document.getElementById('formTitle').textContent = 'Edit product';
+      document.getElementById('editId').value = p.id;
+      document.getElementById('pName').value = p.name;
+      document.getElementById('pCategory').value = p.category || '';
+      document.getElementById('pUnit').value = p.unit || '';
+      document.getElementById('pPrice').value = p.price;
+      document.getElementById('pQuantity').value = p.quantity;
+      document.getElementById('pDescription').value = p.description || '';
+      document.getElementById('pImage').value = p.imageUrl || '';
+      switchView('add');
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  async function toggleAvailability(id, available) {
+    try {
+      await authFetch(`/api/farmer/products/${id}/availability?available=${available}`, { method: 'PATCH' });
+      toast(available ? 'Product is now visible to customers' : 'Product hidden from marketplace', 'success');
+      loadProducts();
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Delete this product? This cannot be undone.')) return;
+    try {
+      await authFetch(`/api/farmer/products/${id}`, { method: 'DELETE' });
+      toast('Product deleted', 'success');
+      loadProducts();
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  function resetForm() {
+    document.getElementById('productForm').reset();
+    document.getElementById('editId').value = '';
+    document.getElementById('formTitle').textContent = 'Add a product';
+  }
+
+  document.getElementById('btnAiDesc').addEventListener('click', async (e) => {
+    const name = document.getElementById('pName').value.trim();
+    if (!name) { toast('Enter a product name first', 'error'); return; }
+    const btn = e.currentTarget;
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generating…';
+    try {
+      const result = await authFetch('/api/farmer/ai/generate-description', {
+        method: 'POST',
+        body: JSON.stringify({ productName: name, category: document.getElementById('pCategory').value.trim() })
+      });
+      document.getElementById('pDescription').value = result.description;
+      toast('Description generated', 'success');
+    } catch (err) { toast(err.message, 'error'); }
+    finally { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke-width="1.6"/></svg> Generate description with AI'; }
+  });
+
+  document.getElementById('btnAiPrice').addEventListener('click', async (e) => {
+    const quantity = document.getElementById('pQuantity').value;
+    if (!quantity) { toast('Enter a quantity first', 'error'); return; }
+    const btn = e.currentTarget;
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Calculating…';
+    try {
+      const result = await authFetch('/api/farmer/ai/suggest-price', {
+        method: 'POST',
+        body: JSON.stringify({
+          category: document.getElementById('pCategory').value.trim() || 'other',
+          quantity: Number(quantity),
+          unit: document.getElementById('pUnit').value.trim()
+        })
+      });
+      document.getElementById('pPrice').value = result.suggestedPrice;
+      toast('Price suggested', 'success');
+    } catch (err) { toast(err.message, 'error'); }
+    finally { btn.disabled = false; btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke-width="1.6"/></svg> Suggest price with AI'; }
+  });
+
+  document.getElementById('productForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('editId').value;
+    const payload = {
+      name: document.getElementById('pName').value.trim(),
+      category: document.getElementById('pCategory').value.trim(),
+      price: Number(document.getElementById('pPrice').value),
+      quantity: Number(document.getElementById('pQuantity').value),
+      unit: document.getElementById('pUnit').value.trim(),
+      description: document.getElementById('pDescription').value.trim(),
+      imageUrl: document.getElementById('pImage').value.trim(),
+      useAiDescription: false,
+      useAiPrice: false
+    };
+    const btn = document.getElementById('saveProductBtn');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+    try {
+      if (id) {
+        await authFetch(`/api/farmer/products/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+        toast('Product updated', 'success');
+      } else {
+        await authFetch('/api/farmer/products', { method: 'POST', body: JSON.stringify(payload) });
+        toast('Product added', 'success');
+      }
+      resetForm();
+      switchView('products');
+    } catch (err) { toast(err.message, 'error'); }
+    finally { btn.disabled = false; btn.textContent = 'Save product'; }
+  });
+
+  // ---------- Orders ----------
+  async function loadOrders() {
+    try {
+      const orders = await authFetch('/api/farmer/orders');
+      const tbody = document.querySelector('#ordersTable tbody');
+      const empty = document.getElementById('ordersEmpty');
+      tbody.innerHTML = '';
+      if (!orders.length) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      orders.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="mono">#${o.id}</td>
+          <td>${escapeHtml(o.customer ? o.customer.name : '—')}</td>
+          <td>${timeAgo(o.orderDate)}</td>
+          <td class="mono">${money(o.totalAmount)}</td>
+          <td><span class="badge ${statusBadgeClass(o.status)}">${o.status.replace(/_/g,' ')}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  // ---------- Earnings ----------
+  async function loadEarnings() {
+    try {
+      const [totalRes, txns] = await Promise.all([
+        authFetch('/api/farmer/earnings/total'),
+        authFetch('/api/farmer/earnings')
+      ]);
+      document.getElementById('totalEarnings').textContent = money(totalRes.totalEarnings);
+      document.getElementById('txnCount').textContent = txns.length;
+      const tbody = document.querySelector('#txnTable tbody');
+      const empty = document.getElementById('txnEmpty');
+      tbody.innerHTML = '';
+      if (!txns.length) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      txns.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="mono">#${t.id}</td>
+          <td class="mono">#${t.order ? t.order.id : '—'}</td>
+          <td class="mono">${money(t.amount)}</td>
+          <td><span class="badge ${statusBadgeClass(t.status)}">${t.status}</span></td>
+          <td>${timeAgo(t.transactionDate)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>

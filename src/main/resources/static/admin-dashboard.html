@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin dashboard — AgriConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dash-body">
+
+<nav class="nav nav-dash" id="dashNav"></nav>
+
+<div class="dash-layout">
+  <aside class="dash-sidebar">
+    <button class="dash-nav-item active" data-view="users">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.5" stroke-width="1.6"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0" stroke-width="1.6"/><circle cx="17.5" cy="9" r="2.8" stroke-width="1.6"/><path d="M15 13.2c2.9.4 5 2.3 5.5 6.8" stroke-width="1.6"/></svg>
+      Users
+    </button>
+    <button class="dash-nav-item" data-view="orders">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 9h16l-1.5 10.5a1 1 0 0 1-1 .9H6.5a1 1 0 0 1-1-.9L4 9Z" stroke-width="1.6"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke-width="1.6"/></svg>
+      All orders
+    </button>
+  </aside>
+
+  <main class="dash-main">
+    <section class="dash-view active" id="view-users">
+      <div class="dash-header"><h1>Users</h1><p class="muted">Everyone registered on the platform.</p></div>
+      <div class="panel">
+        <table id="usersTable">
+          <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Joined</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="dash-view" id="view-orders">
+      <div class="dash-header"><h1>All orders</h1><p class="muted">Every order placed on the platform.</p></div>
+      <div class="panel">
+        <table id="ordersTable">
+          <thead><tr><th>Order</th><th>Customer</th><th>Placed</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+  if (!requireRole('ADMIN')) { /* redirected */ }
+  renderDashNav('Admin');
+
+  const navItems = document.querySelectorAll('.dash-nav-item');
+  navItems.forEach(item => item.addEventListener('click', () => switchView(item.dataset.view)));
+
+  function switchView(view) {
+    document.querySelectorAll('.dash-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    navItems.forEach(n => n.classList.toggle('active', n.dataset.view === view));
+    if (view === 'users') loadUsers();
+    if (view === 'orders') loadOrders();
+  }
+
+  async function loadUsers() {
+    try {
+      const users = await authFetch('/api/admin/users');
+      const tbody = document.querySelector('#usersTable tbody');
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td>${escapeHtml(u.name)}</td>
+          <td>${escapeHtml(u.email)}</td>
+          <td><span class="badge badge-canopy">${u.role.replace(/_/g,' ')}</span></td>
+          <td>${escapeHtml(u.phone || '—')}</td>
+          <td>${timeAgo(u.createdAt)}</td>
+        </tr>`).join('');
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  async function loadOrders() {
+    try {
+      const orders = await authFetch('/api/admin/orders');
+      const tbody = document.querySelector('#ordersTable tbody');
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td class="mono">#${o.id}</td>
+          <td>${escapeHtml(o.customer ? o.customer.name : '—')}</td>
+          <td>${timeAgo(o.orderDate)}</td>
+          <td class="mono">${money(o.totalAmount)}</td>
+          <td><span class="badge ${statusBadgeClass(o.status)}">${o.status.replace(/_/g,' ')}</span></td>
+        </tr>`).join('');
+    } catch (err) { toast(err.message, 'error'); }
+  }
+
+  loadUsers();
+</script>
+</body>
+</html>

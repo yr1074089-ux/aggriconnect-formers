@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create account — AgriConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-side">
+    <a class="brand" href="index.html" style="color:var(--husk);">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 4C10 8 8 14 8 19a8 8 0 0 0 16 0c0-5-2-11-8-15Z" stroke="#F3F1E7" stroke-width="1.6"/><path d="M16 30V16" stroke="#F3F1E7" stroke-width="1.6"/></svg>
+      AgriConnect
+    </a>
+    <div class="auth-side-quote">
+      "Three roles, one supply chain — built around how the harvest actually moves."
+      <span>Farmer · Customer · Delivery Partner</span>
+    </div>
+  </div>
+
+  <div class="auth-form-col">
+    <div class="auth-box">
+      <h1>Create your account</h1>
+      <p class="lead muted">Choose how you'll use AgriConnect.</p>
+
+      <div class="form-error" id="formError"></div>
+
+      <form id="registerForm">
+        <div class="field">
+          <label>I am a</label>
+          <div class="role-picker">
+            <div class="role-pick" data-role="FARMER">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3c-4.5 3-6 7-6 10.5a6 6 0 0 0 12 0C18 10 16.5 6 12 3Z" stroke-width="1.6"/></svg>
+              Farmer
+            </div>
+            <div class="role-pick" data-role="CUSTOMER">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 9h16l-1.5 10.5a1 1 0 0 1-1 .9H6.5a1 1 0 0 1-1-.9L4 9Z" stroke-width="1.6"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke-width="1.6"/></svg>
+              Customer
+            </div>
+            <div class="role-pick" data-role="DELIVERY_PARTNER">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v8H3z" stroke-width="1.6"/><path d="M14 10h4l3 3v2h-7v-5Z" stroke-width="1.6"/></svg>
+              Delivery
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" required placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="input-row">
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" placeholder="9876500000">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" required minlength="6" placeholder="At least 6 characters">
+          </div>
+        </div>
+        <div class="field">
+          <label for="address">Address</label>
+          <input type="text" id="address" placeholder="Village / city, state">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="registerBtn">Create account</button>
+      </form>
+
+      <div class="auth-switch">Already have an account? <a href="login.html">Log in</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+  if (Session.isLoggedIn()) {
+    window.location.href = Session.dashboardFor(Session.role());
+  }
+
+  let selectedRole = null;
+  const picks = document.querySelectorAll('.role-pick');
+  picks.forEach(p => p.addEventListener('click', () => {
+    picks.forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    selectedRole = p.dataset.role;
+  }));
+
+  const params = new URLSearchParams(window.location.search);
+  const preselect = params.get('role');
+  if (preselect) {
+    const match = document.querySelector('.role-pick[data-role="' + preselect + '"]');
+    if (match) match.click();
+  }
+
+  const form = document.getElementById('registerForm');
+  const errorBox = document.getElementById('formError');
+  const btn = document.getElementById('registerBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.classList.remove('show');
+
+    if (!selectedRole) {
+      errorBox.textContent = 'Please choose a role to continue.';
+      errorBox.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      await authFetch('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          password: document.getElementById('password').value,
+          phone: document.getElementById('phone').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          role: selectedRole
+        })
+      });
+      window.location.href = 'login.html?registered=1';
+    } catch (err) {
+      errorBox.textContent = err.message || 'Registration failed. Please try again.';
+      errorBox.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Create account';
+    }
+  });
+</script>
+</body>
+</html>
