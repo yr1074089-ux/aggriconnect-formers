@@ -1,13 +1,22 @@
-# IntelliJ
-.idea/
-*.iml
-
-# Maven
 target/
 
-# Secrets
-src/main/resources/application.properties
+*.class
 
-# Environment
+*.log
+
+.idea/
+
+*.iml
+
+.vscode/
+
+.DS_Store
+
+HELP.md
+
+# Environment files
 .env
-git
+
+# Local secrets/configuration
+application-local.properties
+application-prod.properties
