@@ -1,4 +1,4 @@
-Live Demo:https://aggriconnect-formers.onrender.com/?utm_source=chatgpt.com
+Live Demo:https://aggriconnect-formers.onrender.com
 
 # AgriConnect — Farmer-Customer E-commerce Platform (Spring Boot)
 
